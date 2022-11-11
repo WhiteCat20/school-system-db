@@ -8,28 +8,35 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
         return view('login-register.login');
     }
-    public function authenticate(Request $request){
+    public function authenticate(Request $request)
+    {
         $credentials = $request->validate([
             'number_id' => ['required'],
-            'password' => ['required']
+            'password' => ['required'],
         ]);
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
 
         return back()->with('LoginError', 'Login Failed!');
     }
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
 
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
+        request()
+            ->session()
+            ->invalidate();
+        request()
+            ->session()
+            ->regenerateToken();
 
-        return redirect('/login'); 
+        return redirect('/login');
     }
 }
